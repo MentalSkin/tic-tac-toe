@@ -1,0 +1,27 @@
+html {
+    background-color: beige;
+}
+
+main {
+    display: block;
+    justify-content: center;
+
+}
+
+#title {
+    text-align: center;
+}
+
+#gameboardContainer {
+    display: grid;
+    justify-content: center;
+}
+
+.tile {
+    width: 30px;
+    height: 30px;
+    background-color: blue;
+    border-color: black;
+    border-radius: 5px;
+    
+}
