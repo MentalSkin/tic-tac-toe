@@ -6,6 +6,14 @@ const Gameboard = (function(){
     let r2c0 = ''; let r2c1 = ''; let r2c2 = '';
 
     let gameboardContainer = document.getElementById('gameboardContainer')
+    
+    let tileList = [...document.querySelectorAll('.tile')];
+
+    tileList.forEach(element => {
+        element.addEventListener('click', function( event ) {
+            event.target.setAttribute("style", "background-color: red;")})});
+
+
 
     return {
         r0c0,r0c1,r0c2,
@@ -16,4 +24,5 @@ const Gameboard = (function(){
 
     }
 })();
+
 
