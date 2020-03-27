@@ -1,5 +1,5 @@
 html {
-    background-color: beige;
+    background-color: rgb(243, 243, 188);
 }
 
 main {
@@ -10,18 +10,42 @@ main {
 
 #title {
     text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 40px;
+    font-family: monospace;
+    font-weight: bold;
+    font-variant: small-caps;
+
 }
 
+
 #gameboardContainer {
-    display: grid;
+    display: flex;
     justify-content: center;
 }
 
+#gameboard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 2px;
+    width: fit-content;
+}
+
 .tile {
-    width: 30px;
-    height: 30px;
-    background-color: blue;
+    width: 60px;
+    height: 60px;
+    background-color: rgba(18, 18, 248, 0.788);
     border-color: black;
     border-radius: 5px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
     
+}
+
+i {
+    font-size: 50px;
+    align-self: center;
+
 }
