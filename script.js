@@ -1,40 +1,29 @@
 //module for the gameboard
 const Gameboard = (function(){
-    //board tiles
-    // let r0c0 = ''; let r0c1 = ''; let r0c2 = '';
-    // let r1c0 = ''; let r1c1 = ''; let r1c2 = '';
-    // let r2c0 = ''; let r2c1 = ''; let r2c2 = '';
 
-    //let gameboardContainer = document.getElementById('gameboardContainer')
+    const getGameType = () => {
+        let gameType = document.getElementById('gameType').value
+        return gameType
+    }
     
     let counter = 0
 
+    const symbolX = 'fas fa-times'
+    const symbolO = 'far fa-circle'
+
     let tileList = [...document.querySelectorAll('.tile')];
 
-    //event listener for each tile DONE
-    //when tile is clicked, add symbol, change style(color scale)
-    //check if we have a winner
-    //disable tile for further clicks DONE
-
-
-    tileList.forEach(element => {
-        element.addEventListener('click', function(event) {
-                    //event.target.setAttribute("style", "background-color: red; border-radius: 20px");
-            
-                    //event.target.setAttribute("style", "background-color: rgba(18, 18, 248, 0.50); scale: 80%");
-
+    const addSymbol = function(event) {
             //checks if tile is open or closed
             if (!event.target.classList.value.includes('clicked')) {
 
                 let i = document.createElement("i");
                 //add X or O based on counter; increments counter
                 if (counter%2 === 0) {
-                    i.classList.add('fas')
-                    i.classList.add('fa-times')
+                    i.setAttribute("class","fas fa-times");
                     event.target.dataset.symbol = 'x'
                 } else {
-                    i.classList.add('far')
-                    i.classList.add('fa-circle')
+                    i.setAttribute("class","far fa-circle")
                     event.target.dataset.symbol = 'o'
                 }
                 i.classList.add('clicked')
@@ -43,10 +32,45 @@ const Gameboard = (function(){
                 event.target.appendChild(i);
                 counter += 1;
             }
+    }
 
-            //check if we have a winner
+
+
+
+
+    //when the computer makes choice:
+    const computerPlays = (symbol, tile) => {
+
+       let i = document.createElement("i");
+
+
+
+       return {}
+    }
+
+
+    //when a human clicks:
+
+    const humanPlays = function() {
+
+        tileList.forEach(element => {
+            element.addEventListener('click', addSymbol)
+        });
+        
+        
+
+    }
+    const humanEndsRound = function() {
+        tileList.forEach(element => {
+            element.removeEventListener('click', addSymbol)
         })
-    });
+    }
+
+    
+
+    const checkWinner = function() {
+
+    }
 
     const reset = function() {
          //function that resets the board
@@ -64,9 +88,19 @@ const Gameboard = (function(){
         //gameboardContainer,
 
         returnCounter,
-        reset
+        reset,
+        getGameType,
+        checkWinner,
+        humanPlays,
+        humanEndsRound,
 
     }
 })();
 
+//Factory for players
+const Player = () => {
+    let playerName = '';
+    let playerSymbol = ''
 
+    return {}
+}

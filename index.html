@@ -9,6 +9,22 @@
     <body>
         <main>
             <div id="title">TIC-TAC-TOE</div>
+            <div id="gameSetup">
+                <div id="divGameType" class="form">
+                    <label for="gameType" class="labelInput">Game type</label>
+                    <select id="gameType">
+                        <option value="playerVsPlayer">Player vs Player</option>
+                        <option value="playerVsComputer">Player vs Computer</option>
+                    </select>
+                </div>
+                <div id="divSelectSymbol" class="form">
+                    <label for="selectSymbol" class="labelInput">Select Symbol for Player1</label>
+                    <select id="selectSymbol">
+                        <option value="x">x</option>
+                        <option value="o">o</option>
+                    </select>
+                </div>
+            </div>
             <div id="gameboardContainer">
                 <div id="gameboard">
                     <div id="r0c0" class="tile" data-symbol=""></div>
