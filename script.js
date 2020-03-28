@@ -20,23 +20,26 @@ const Gameboard = (function(){
     tileList.forEach(element => {
         element.addEventListener('click', function(event) {
                     //event.target.setAttribute("style", "background-color: red; border-radius: 20px");
-
+            
                     //event.target.setAttribute("style", "background-color: rgba(18, 18, 248, 0.50); scale: 80%");
 
             //checks if tile is open or closed
-            if (!event.target.classList.value.includes('closed')) {
+            if (!event.target.classList.value.includes('clicked')) {
 
                 let i = document.createElement("i");
                 //add X or O based on counter; increments counter
                 if (counter%2 === 0) {
                     i.classList.add('fas')
                     i.classList.add('fa-times')
+                    event.target.dataset.symbol = 'x'
                 } else {
                     i.classList.add('far')
                     i.classList.add('fa-circle')
+                    event.target.dataset.symbol = 'o'
                 }
-                i.classList.add('closed')
-                event.target.classList.add('closed')
+                i.classList.add('clicked')
+                event.target.classList.add('clicked')
+                event.target.classList.add('tileClicked')
                 event.target.appendChild(i);
                 counter += 1;
             }

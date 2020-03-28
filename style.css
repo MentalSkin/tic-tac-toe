@@ -36,11 +36,19 @@ main {
     width: 60px;
     height: 60px;
     background-color: rgba(18, 18, 248, 0.788);
+    box-shadow: 0 0 5px -1px rgba(0,0,0,1);
     border-color: black;
     border-radius: 5px;
     text-align: center;
     display: flex;
     justify-content: center;
+    
+}
+
+.tileClicked {
+    background-color: rgba(18, 18, 248, 0.50);
+    transform: scale(0.92);
+    box-shadow: 0 0 5px -1px rgba(0,0,0,0.6);
     
 }
 
