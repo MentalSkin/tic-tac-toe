@@ -1,3 +1,6 @@
+const symbolX = ['fas fa-times', 'x']
+const symbolO = ['far fa-circle', 'o']
+
 //module for the gameboard
 const Gameboard = (function(){
 
@@ -5,11 +8,6 @@ const Gameboard = (function(){
         let gameType = document.getElementById('gameType').value
         return gameType
     }
-    
-    let counter = 0
-
-    const symbolX = 'fas fa-times'
-    const symbolO = 'far fa-circle'
 
     let tileList = [...document.querySelectorAll('.tile')];
 
@@ -18,32 +16,21 @@ const Gameboard = (function(){
             if (!event.target.classList.value.includes('clicked')) {
 
                 let i = document.createElement("i");
-                //add X or O based on counter; increments counter
-                if (counter%2 === 0) {
-                    i.setAttribute("class","fas fa-times");
-                    event.target.dataset.symbol = 'x'
-                } else {
-                    i.setAttribute("class","far fa-circle")
-                    event.target.dataset.symbol = 'o'
-                }
+                i.setAttribute("class", currentPlayer.symbol[0]);
+                event.target.dataset.symbol = currentPlayer.symbol[1]
+
                 i.classList.add('clicked')
                 event.target.classList.add('clicked')
                 event.target.classList.add('tileClicked')
                 event.target.appendChild(i);
-                counter += 1;
             }
     }
-
-
-
-
 
     //when the computer makes choice:
     const computerPlays = (symbol, tile) => {
 
-       let i = document.createElement("i");
-
-
+        //look for available tiles
+        let i = document.createElement("i");
 
        return {}
     }
@@ -51,8 +38,8 @@ const Gameboard = (function(){
 
     //when a human clicks:
 
-    const humanPlays = function() {
-
+    const humanPlays = function(humanPlayer) {
+        
         tileList.forEach(element => {
             element.addEventListener('click', addSymbol)
         });
@@ -72,35 +59,30 @@ const Gameboard = (function(){
 
     }
 
-    const reset = function() {
+    const resetBoard = function() {
          //function that resets the board
          //clear tiles
          //set counter to 0
          counter = 0;
     }
 
-    const returnCounter = function(){return counter}
-
     return {
-        // r0c0,r0c1,r0c2,
-        // r1c0,r1c1,r1c2,
-        // r2c0,r2c1,r2c2,
-        //gameboardContainer,
-
-        returnCounter,
-        reset,
+        resetBoard,
         getGameType,
         checkWinner,
         humanPlays,
         humanEndsRound,
-
+        computerPlays,
     }
 })();
 
 //Factory for players
-const Player = () => {
-    let playerName = '';
-    let playerSymbol = ''
+const Player = (name, symbol, nature) => {
 
-    return {}
+    return {name, symbol, nature}
 }
+
+const playerOne = Player('John', symbolX, 'human') //get this info from form
+const playerTwo = Player('Doe', symbolO, 'computer')
+
+let currentPlayer = playerOne
