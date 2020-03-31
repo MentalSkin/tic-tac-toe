@@ -51,11 +51,13 @@ const GameFlow = (function(){
     }
 
     const humanTurnStart = function(humanPlayer) {
-        if (checkWinner() === 'gameOn') {
+        if (gameStatus === 'gameOn') {
         
             Gameboard.tileList.forEach(element => {
                 element.addEventListener('click', addPlayerSymbol)
             });
+
+            
         }
     }
 
@@ -63,9 +65,9 @@ const GameFlow = (function(){
         Gameboard.tileList.forEach(element => {
             element.removeEventListener('click', addPlayerSymbol)
         })
-        if (getGameType() === 'humanVsHuman' && checkWinner() === 'gameOn') {
+        if (getGameType() === 'humanVsHuman' && gameStatus === 'gameOn') {
             humanTurnStart()
-        } else {
+        } else if (getGameType() === 'humanVsComputer' && gameStatus === 'gameOn'){
             computerTurn()
         }
     }
@@ -75,10 +77,12 @@ const GameFlow = (function(){
         let i = document.createElement("i");
         i.setAttribute("class", currentPlayer.symbol[0]);
         //... .dataset.symbol = currentPlayer.symbol[1] //get the tileID from some function that generates computer behaviour
-       return {}
+        checkWinner()        
+        humanTurnStart()
     }
 
-    let turnCount = 0;
+    let turnCount = 1;
+    let gameStatus ='gameOn'
     const checkWinner = function(tileList = Gameboard.tileList) {
         let tiles = Gameboard.tileList
         if (tiles[0].dataset.symbol === 'x' && tiles[1].dataset.symbol === 'x' && tiles[2].dataset.symbol === 'x' || tiles[0].dataset.symbol === 'o' && tiles[1].dataset.symbol === 'o' && tiles[2].dataset.symbol === 'o' ||
@@ -92,14 +96,15 @@ const GameFlow = (function(){
         {
             //remove event listener
             console.log('Winner!')
-            return 'winner'
+            gameStatus = 'winner'
         } else if (turnCount === 9){
             console.log('Draw!')
-            return 'draw'
+            gameStatus = 'draw'
         } else {
             console.log('GameOn!')
-            return 'gameOn'
+            gameStatus = 'gameOn'
         }
+        turnCount++
         //if we have a winner: reset board, message, ...
     }
 
