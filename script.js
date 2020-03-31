@@ -1,88 +1,125 @@
-const symbolX = ['fas fa-times', 'x']
-const symbolO = ['far fa-circle', 'o']
-
-//module for the gameboard
+//Module for Gameboard
 const Gameboard = (function(){
-
-    const getGameType = () => {
-        let gameType = document.getElementById('gameType').value
-        return gameType
-    }
-
-    let tileList = [...document.querySelectorAll('.tile')];
-
-    const addSymbol = function(event) {
-            //checks if tile is open or closed
-            if (!event.target.classList.value.includes('clicked')) {
-
-                let i = document.createElement("i");
-                i.setAttribute("class", currentPlayer.symbol[0]);
-                event.target.dataset.symbol = currentPlayer.symbol[1]
-
-                i.classList.add('clicked')
-                event.target.classList.add('clicked')
-                event.target.classList.add('tileClicked')
-                event.target.appendChild(i);
-            }
-    }
-
-    //when the computer makes choice:
-    const computerPlays = (symbol, tile) => {
-
-        //look for available tiles
-        let i = document.createElement("i");
-
-       return {}
-    }
-
-
-    //when a human clicks:
-
-    const humanPlays = function(humanPlayer) {
-        
-        tileList.forEach(element => {
-            element.addEventListener('click', addSymbol)
-        });
-        
-        
-
-    }
-    const humanEndsRound = function() {
-        tileList.forEach(element => {
-            element.removeEventListener('click', addSymbol)
-        })
-    }
-
-    
-
-    const checkWinner = function() {
-
-    }
-
-    const resetBoard = function() {
-         //function that resets the board
-         //clear tiles
-         //set counter to 0
-         counter = 0;
-    }
+    const symbolX = ['fas fa-times', 'x']
+    const symbolO = ['far fa-circle', 'o']
+    const tileList = [...document.querySelectorAll('.tile')];
 
     return {
-        resetBoard,
-        getGameType,
-        checkWinner,
-        humanPlays,
-        humanEndsRound,
-        computerPlays,
+        symbolX,
+        symbolO,
+        tileList,
     }
 })();
 
 //Factory for players
 const Player = (name, symbol, nature) => {
-
     return {name, symbol, nature}
 }
 
-const playerOne = Player('John', symbolX, 'human') //get this info from form
-const playerTwo = Player('Doe', symbolO, 'computer')
+//Temporary
+const playerOne = Player('John', Gameboard.symbolX, 'human') //get this info from form
+const playerTwo = Player('Doe', Gameboard.symbolO, 'human')
 
-let currentPlayer = playerOne
+const GameFlow = (function(){
+    const getGameType = () => {
+        let gameType = document.getElementById('gameType').value
+        return gameType
+    }
+
+    let playerCounter = 0
+    let currentPlayer = playerOne
+    let winner = '' 
+
+    const addPlayerSymbol = function(event) {
+        if (playerCounter%2 === 0) {currentPlayer = playerOne}
+        else {currentPlayer = playerTwo}
+        playerCounter++
+
+        //checks if tile is open or closed
+        if (!event.target.classList.value.includes('clicked')) {
+
+            let i = document.createElement("i");
+            i.setAttribute("class", currentPlayer.symbol[0]);
+            event.target.dataset.symbol = currentPlayer.symbol[1]
+            i.classList.add('clicked')
+            event.target.classList.add('clicked')
+            event.target.classList.add('tileClicked')
+            event.target.appendChild(i);
+            checkWinner()
+            humanTurnEnd()
+        }
+    }
+
+    const humanTurnStart = function(humanPlayer) {
+        if (checkWinner() === 'gameOn') {
+        
+            Gameboard.tileList.forEach(element => {
+                element.addEventListener('click', addPlayerSymbol)
+            });
+        }
+    }
+
+    const humanTurnEnd = function() {
+        Gameboard.tileList.forEach(element => {
+            element.removeEventListener('click', addPlayerSymbol)
+        })
+        if (getGameType() === 'humanVsHuman' && checkWinner() === 'gameOn') {
+            humanTurnStart()
+        } else {
+            computerTurn()
+        }
+    }
+
+    const computerTurn = (symbol = playerTwo.symbol, tile) => {
+        //look for available tiles: filter
+        let i = document.createElement("i");
+        i.setAttribute("class", currentPlayer.symbol[0]);
+        //... .dataset.symbol = currentPlayer.symbol[1] //get the tileID from some function that generates computer behaviour
+       return {}
+    }
+
+    let turnCount = 0;
+    const checkWinner = function(tileList = Gameboard.tileList) {
+        let tiles = Gameboard.tileList
+        if (tiles[0].dataset.symbol === 'x' && tiles[1].dataset.symbol === 'x' && tiles[2].dataset.symbol === 'x' || tiles[0].dataset.symbol === 'o' && tiles[1].dataset.symbol === 'o' && tiles[2].dataset.symbol === 'o' ||
+            tiles[3].dataset.symbol === 'x' && tiles[4].dataset.symbol === 'x' && tiles[5].dataset.symbol === 'x' || tiles[3].dataset.symbol === 'o' && tiles[4].dataset.symbol === 'o' && tiles[5].dataset.symbol === 'o' ||
+            tiles[6].dataset.symbol === 'x' && tiles[7].dataset.symbol === 'x' && tiles[8].dataset.symbol === 'x' || tiles[6].dataset.symbol === 'o' && tiles[7].dataset.symbol === 'o' && tiles[8].dataset.symbol === 'o' ||
+            tiles[0].dataset.symbol === 'x' && tiles[3].dataset.symbol === 'x' && tiles[6].dataset.symbol === 'x' || tiles[0].dataset.symbol === 'o' && tiles[3].dataset.symbol === 'o' && tiles[6].dataset.symbol === 'o' ||
+            tiles[1].dataset.symbol === 'x' && tiles[4].dataset.symbol === 'x' && tiles[7].dataset.symbol === 'x' || tiles[1].dataset.symbol === 'o' && tiles[4].dataset.symbol === 'o' && tiles[7].dataset.symbol === 'o' ||
+            tiles[2].dataset.symbol === 'x' && tiles[5].dataset.symbol === 'x' && tiles[8].dataset.symbol === 'x' || tiles[2].dataset.symbol === 'o' && tiles[5].dataset.symbol === 'o' && tiles[8].dataset.symbol === 'o' ||
+            tiles[0].dataset.symbol === 'x' && tiles[4].dataset.symbol === 'x' && tiles[8].dataset.symbol === 'x' || tiles[0].dataset.symbol === 'o' && tiles[4].dataset.symbol === 'o' && tiles[8].dataset.symbol === 'o' ||
+            tiles[6].dataset.symbol === 'x' && tiles[4].dataset.symbol === 'x' && tiles[2].dataset.symbol === 'x' || tiles[6].dataset.symbol === 'o' && tiles[4].dataset.symbol === 'o' && tiles[2].dataset.symbol === 'o')
+        {
+            //remove event listener
+            console.log('Winner!')
+            return 'winner'
+        } else if (turnCount === 9){
+            console.log('Draw!')
+            return 'draw'
+        } else {
+            console.log('GameOn!')
+            return 'gameOn'
+        }
+        //if we have a winner: reset board, message, ...
+    }
+
+    const resetBoard = function(tileList = Gameboard.tileList) {
+        //function that resets the board
+        //clear tiles
+        playerCounter = 0;
+   }
+
+    return {
+        getGameType,
+        addPlayerSymbol,
+        humanTurnStart,
+        humanTurnEnd,
+        computerTurn,
+        checkWinner,
+        resetBoard,
+    }
+})();
+
+if (GameFlow.getGameType() === 'humanVsHuman') {
+    GameFlow.humanTurnStart()
+}
