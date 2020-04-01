@@ -52,12 +52,11 @@ const GameFlow = (function(){
 
     const humanTurnStart = function(humanPlayer) {
         if (gameStatus === 'gameOn') {
-        
             Gameboard.tileList.forEach(element => {
                 element.addEventListener('click', addPlayerSymbol)
             });
-
-            
+        } else {
+            //winner function
         }
     }
 
@@ -72,11 +71,22 @@ const GameFlow = (function(){
         }
     }
 
-    const computerTurn = (symbol = playerTwo.symbol, tile) => {
-        //look for available tiles: filter
+    const computerTurn = (tileID) => {
+        if (playerCounter%2 === 0) {currentPlayer = playerOne}
+        else {currentPlayer = playerTwo}
+        playerCounter++
+        //look for available tiles: filter Gameboard.tileList
+        //GameboardFiltered
+        let tile = document.getElementById(tileID)
         let i = document.createElement("i");
         i.setAttribute("class", currentPlayer.symbol[0]);
-        //... .dataset.symbol = currentPlayer.symbol[1] //get the tileID from some function that generates computer behaviour
+        tile.dataset.symbol = currentPlayer.symbol[1]
+        i.classList.add('clicked')
+        tile.classList.add('clicked')
+        tile.classList.add('tileClicked')
+        tile.appendChild(i);
+
+        
         checkWinner()        
         humanTurnStart()
     }
@@ -108,9 +118,14 @@ const GameFlow = (function(){
         //if we have a winner: reset board, message, ...
     }
 
-    const resetBoard = function(tileList = Gameboard.tileList) {
-        //function that resets the board
-        //clear tiles
+    const resetBoard = function() {
+        Gameboard.tileList.forEach(element => {
+            while (element.childElementCount !== 0) {
+            element.removeChild(element.firstChild)
+            }
+            element.classList.remove('clicked', 'tileClicked')
+            element.dataset.symbol = ''
+        })
         playerCounter = 0;
    }
 
@@ -127,4 +142,16 @@ const GameFlow = (function(){
 
 if (GameFlow.getGameType() === 'humanVsHuman') {
     GameFlow.humanTurnStart()
+} else if (GameFlow.getGameType() === 'ComputerVsHuman') {
+
 }
+
+
+
+
+//preference: Make 3; block 3; center; corners
+//exceptions: center traped in corners;
+
+
+
+//ISSUES: Clicking 2 times on a filed tile, skips change of symbol
