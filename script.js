@@ -16,17 +16,26 @@ const Player = (name, symbol, nature) => {
     return {name, symbol, nature}
 }
 
-//Temporary
+//Two instances of Player created
 const playerOne = Player('Player1', Gameboard.symbolX, 'nature')
 const playerTwo = Player('Player2', Gameboard.symbolO, 'nature')
 
 
+
+//Module to control the game flow
+const GameFlow = (function(){
+    const getGameType = () => {
+        let gameType = document.getElementById('gameType').value
+        return gameType
+    }
+
+//setup and launch the game
 const startGame = function() {
     //names
-    if (GameFlow.getGameType() === 'humanVsHuman') {
+    if (getGameType() === 'humanVsHuman') {
         (document.getElementById('playerOneName').value !== '') ? playerOne.name = document.getElementById('playerOneName').value : playerOne.name = 'Player1';
         (document.getElementById('playerTwoName').value !== '') ? playerTwo.name = document.getElementById('playerTwoName').value : playerTwo.name = 'Player2';
-    } else if (GameFlow.getGameType() === 'humanVsComputer') {
+    } else if (getGameType() === 'humanVsComputer') {
         (document.getElementById('playerOneName').value !== '') ? playerOne.name = document.getElementById('playerOneName').value : playerOne.name = 'Player1';
         playerTwo.name = 'Computer'
     }
@@ -38,36 +47,31 @@ const startGame = function() {
         playerOne.symbol = Gameboard.symbolO
         playerTwo.symbol = Gameboard.symbolX
     }
+
+    humanTurnStart() //because it always starts with a human...
 }
 
-
-
-
-const GameFlow = (function(){
-    const getGameType = () => {
-        let gameType = document.getElementById('gameType').value
-        return gameType
-    }
 
     let playerCounter = 0
     let currentPlayer = playerOne
     let winner = '' 
 
+    //mark human player's choice on the board
     const addPlayerSymbol = function(event) {
         if (playerCounter%2 === 0) {currentPlayer = playerOne}
         else {currentPlayer = playerTwo}
         playerCounter++
 
-        //checks if tile is open or closed
+        //checks if tile is open or closed; creates child with current player symbol and appends it
         if (!event.target.classList.value.includes('clicked')) {
 
             let i = document.createElement("i");
+            i.classList.add('clicked')
             i.setAttribute("class", currentPlayer.symbol[0]);
             event.target.dataset.symbol = currentPlayer.symbol[1]
-            i.classList.add('clicked')
-            event.target.classList.add('clicked')
-            event.target.classList.add('tileClicked')
+            event.target.classList.add('clicked', 'tileClicked')
             event.target.appendChild(i);
+
             checkWinner()
             humanTurnEnd()
         }
@@ -84,13 +88,17 @@ const GameFlow = (function(){
     }
 
     const humanTurnEnd = function() {
+        //removes eventListeners
         Gameboard.tileList.forEach(element => {
             element.removeEventListener('click', addPlayerSymbol)
         })
+        //launches the next player turn depending on which type of player is Player2
         if (getGameType() === 'humanVsHuman' && gameStatus === 'gameOn') {
             humanTurnStart()
         } else if (getGameType() === 'humanVsComputer' && gameStatus === 'gameOn'){
-            computerTurn()
+            computerTurn(dumbComputerTurn())
+        } else {
+            //smart computer
         }
     }
 
@@ -114,6 +122,7 @@ const GameFlow = (function(){
     }
 
     const dumbComputerTurn = function(){
+        //check for available tiles and play random
         let availableTilesID = Gameboard.tileList.filter(function(element) {return (element.dataset.symbol === '')})
                                                  .map(function(element) {return (element.id)})
         let randomIndex = Math.floor(Math.random()*(availableTilesID.length))
@@ -133,7 +142,6 @@ const GameFlow = (function(){
             tiles[0].dataset.symbol === 'x' && tiles[4].dataset.symbol === 'x' && tiles[8].dataset.symbol === 'x' || tiles[0].dataset.symbol === 'o' && tiles[4].dataset.symbol === 'o' && tiles[8].dataset.symbol === 'o' ||
             tiles[6].dataset.symbol === 'x' && tiles[4].dataset.symbol === 'x' && tiles[2].dataset.symbol === 'x' || tiles[6].dataset.symbol === 'o' && tiles[4].dataset.symbol === 'o' && tiles[2].dataset.symbol === 'o')
         {
-            //remove event listener
             console.log('Winner!')
             gameStatus = 'winner' 
             //if we have a winner: message, ...
@@ -158,36 +166,18 @@ const GameFlow = (function(){
         playerCounter = 0;
         gameStatus ='gameOn'
         turnCount = 1
-
-        humanTurnStart()
    }
 
     return {
-        getGameType,
-        addPlayerSymbol,
-        humanTurnStart,
-        humanTurnEnd,
-        computerTurn,
-        checkWinner,
         resetBoard,
+        startGame,
     }
 })();
 
    
-
 document.getElementById('resetButton').onclick = function() {GameFlow.resetBoard()}
+document.getElementById('startButton').onclick = function() {GameFlow.startGame()}
 
-document.getElementById('startButton').onclick = function() {startGame()}
-
-
-
-
-
-if (GameFlow.getGameType() === 'humanVsHuman') {
-    GameFlow.humanTurnStart()
-} else if (GameFlow.getGameType() === 'ComputerVsHuman') {
-    GameFlow.computerTurn(GameFlow.dumbComputerTurn())
-}
 
 
 

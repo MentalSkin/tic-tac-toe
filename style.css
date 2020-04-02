@@ -8,10 +8,37 @@ main {
 
 }
 
+label {
+    display: inline-block;
+    padding: 0.2em 0 0.2em 0;
+    font-family: 'Poppins', sans-serif;
+    width: 90px;
+    font-size: 12px;
+}
+
+input {
+    width: 140px;
+}
+
+button {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+
+select {
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+}
+
+i {
+    font-size: 50px;
+    align-self: center;
+}
+
 #title {
     text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 0px;
+    padding-bottom: 10px;
     font-size: 40px;
     font-family: 'Shadows Into Light', cursive;
     font-weight: bold;
@@ -19,10 +46,24 @@ main {
 
 }
 
+#selectSymbolLabel {
+    width: 55px;
+}
+
+#divStartButton {
+    display: flex;
+    justify-content: center;    
+}
+
+#startButton {
+    margin-top: 5px;
+    font-size: 20px;
+}
+
 #gameboardContainer {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 #gameboard {
@@ -52,7 +93,3 @@ main {
     
 }
 
-i {
-    font-size: 50px;
-    align-self: center;
-}

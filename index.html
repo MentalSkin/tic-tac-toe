@@ -5,6 +5,7 @@
         <title></title>
         <link rel="stylesheet" href="style.css">
         <script src="https://kit.fontawesome.com/e155c15edc.js" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light&display=swap" rel="stylesheet">
     </head>
     <body>
@@ -12,30 +13,34 @@
             <div id="title">Tic-Tac-Toe</div>
             <div id="gameSetup">
                 <div id="divGameType" class="form">
-                    <label for="gameType" class="labelInput">Game type</label>
+                    <label for="gameType" class="labelInput">Game Type</label>
                     <select id="gameType">
                         <option value="humanVsHuman">Human vs Human</option>
                         <option value="humanVsComputer">Human vs Computer</option>
                     </select>
                 </div>
                 <div id="divNames">
-                    <label for="playerOne" class="labelInput">Player 1 Name</label>
-                    <input id="playerOneName">
-                    <label for="playerTwo" class="labelInput">Player 2 Name</label>
-                    <input id="playerTwoName">
+                    <div id="divPlayerOneInput">
+                        <label for="playerOne" class="labelInput">Player1 Name</label>
+                        <input id="playerOneName">
+                        <label for="selectSymbol" class="labelInput" id="selectSymbolLabel">Symbol</label>
+                        <select id="selectSymbol">
+                            <option value="x">x</option>
+                            <option value="o">o</option>
+                        </select>
+                    </div>
+                    <div id="divPlayerTwoInput">
+                        <label for="playerTwo" class="labelInput">Player2 Name</label>
+                        <input id="playerTwoName">
+                    </div>
                 </div>
                 <div id="divSelectSymbol" class="form">
-                    <label for="selectSymbol" class="labelInput">Select Symbol for Player1</label>
-                    <select id="selectSymbol">
-                        <option value="x">x</option>
-                        <option value="o">o</option>
-                    </select>
                 </div>
                 <div id="divStartButton">
                     <button id="startButton">Start!</button>
                 </div>
                 <div id="divResetButton">
-                    <button id="resetButton">Reset Gameboard</button>
+                    <button id="resetButton">Reset</button>
                 </div>
             </div>
             <div id="gameboardContainer">
