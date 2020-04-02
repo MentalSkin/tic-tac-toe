@@ -39,6 +39,8 @@ const startGame = function() {
         (document.getElementById('playerOneName').value !== '') ? playerOne.name = document.getElementById('playerOneName').value : playerOne.name = 'Player1';
         playerTwo.name = 'Computer'
     }
+    document.getElementById('displayPlayerOneName').innerHTML = playerOne.name
+    document.getElementById('displayPlayerTwoName').innerHTML = playerTwo.name
     //symbols
     if (document.getElementById('selectSymbol').value === 'x') {
         playerOne.symbol = Gameboard.symbolX

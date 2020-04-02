@@ -60,6 +60,19 @@ i {
     font-size: 20px;
 }
 
+#divResetButton {
+    display: flex;
+}
+
+.nameLabel {
+    display: flex;
+    padding: 80px 30px 10px 30px;
+    font-size: 20px;
+    width: fit-content;
+    text-align: right;
+}
+
+
 #gameboardContainer {
     display: flex;
     justify-content: center;
