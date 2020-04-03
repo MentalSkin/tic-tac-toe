@@ -29,29 +29,30 @@ const GameFlow = (function(){
         return gameType
     }
 
-//setup and launch the game
-const startGame = function() {
-    //names
-    if (getGameType() === 'humanVsHuman') {
+    //setup and launch the game
+    const startGame = function() {
+        //names
         (document.getElementById('playerOneName').value !== '') ? playerOne.name = document.getElementById('playerOneName').value : playerOne.name = 'Player1';
-        (document.getElementById('playerTwoName').value !== '') ? playerTwo.name = document.getElementById('playerTwoName').value : playerTwo.name = 'Player2';
-    } else if (getGameType() === 'humanVsComputer') {
-        (document.getElementById('playerOneName').value !== '') ? playerOne.name = document.getElementById('playerOneName').value : playerOne.name = 'Player1';
-        playerTwo.name = 'Computer'
-    }
-    document.getElementById('displayPlayerOneName').innerHTML = playerOne.name
-    document.getElementById('displayPlayerTwoName').innerHTML = playerTwo.name
-    //symbols
-    if (document.getElementById('selectSymbol').value === 'x') {
-        playerOne.symbol = Gameboard.symbolX
-        playerTwo.symbol = Gameboard.symbolO
-    } else {
-        playerOne.symbol = Gameboard.symbolO
-        playerTwo.symbol = Gameboard.symbolX
-    }
+        if (getGameType() === 'humanVsHuman') {
+            (document.getElementById('playerTwoName').value !== '') ? playerTwo.name = document.getElementById('playerTwoName').value : playerTwo.name = 'Player2';
+        } else if (getGameType() === 'humanVsComputer') {
+            playerTwo.name = 'Dumb Computer'
+        } else if (getGameType() === 'humanVsSmartComputer') {
+            playerTwo.name = 'Smart Computer'
+        }
+        document.getElementById('displayPlayerOneName').innerHTML = playerOne.name
+        document.getElementById('displayPlayerTwoName').innerHTML = playerTwo.name
+        //symbols
+        if (document.getElementById('selectSymbol').value === 'x') {
+            playerOne.symbol = Gameboard.symbolX
+            playerTwo.symbol = Gameboard.symbolO
+        } else {
+            playerOne.symbol = Gameboard.symbolO
+            playerTwo.symbol = Gameboard.symbolX
+        }
 
-    humanTurnStart() //because it always starts with a human...
-}
+        humanTurnStart() //because it always starts with a human...
+    }
 
 
     let playerCounter = 0
@@ -62,17 +63,17 @@ const startGame = function() {
     const addPlayerSymbol = function(event) {
         if (playerCounter%2 === 0) {currentPlayer = playerOne}
         else {currentPlayer = playerTwo}
-        playerCounter++
-
+        
         //checks if tile is open or closed; creates child with current player symbol and appends it
         if (!event.target.classList.value.includes('clicked')) {
 
             let i = document.createElement("i");
-            i.classList.add('clicked')
             i.setAttribute("class", currentPlayer.symbol[0]);
+            i.classList.add('clicked')
             event.target.dataset.symbol = currentPlayer.symbol[1]
             event.target.classList.add('clicked', 'tileClicked')
             event.target.appendChild(i);
+            playerCounter++
 
             checkWinner()
             humanTurnEnd()
@@ -99,8 +100,8 @@ const startGame = function() {
             humanTurnStart()
         } else if (getGameType() === 'humanVsComputer' && gameStatus === 'gameOn'){
             computerTurn(dumbComputerTurn())
-        } else {
-            //smart computer
+        } else if (getGameType() === 'humanVsSmartComputer' && gameStatus === 'gameOn'){
+            computerTurn(smartComputerTurn())
         }
     }
 
@@ -130,6 +131,220 @@ const startGame = function() {
         let randomIndex = Math.floor(Math.random()*(availableTilesID.length))
         return availableTilesID[randomIndex]
     }
+
+    const smartComputerTurn = function(){
+        //check for available tiles
+        let availableTilesID = Gameboard.tileList.filter(function(element) {return (element.dataset.symbol === '')})
+                                                 .map(function(element) {return (element.id)})
+        //identify corners, tops, center
+        let tileToPlay = ''
+        let r0c0Content = document.getElementById('r0c0').dataset.symbol
+        let r0c2Content = document.getElementById('r0c2').dataset.symbol
+        let r2c0Content = document.getElementById('r2c0').dataset.symbol
+        let r2c2Content = document.getElementById('r2c2').dataset.symbol
+        let r1c1Content = document.getElementById('r1c1').dataset.symbol
+
+
+        //exception
+    if((r2c0Content==='x'&&r1c1Content==='o'&&r0c2Content==='x')||(r0c0Content==='x'&&r1c1Content==='o'&&r2c2Content==='x') && (availableTilesID.length===6)) {
+        let availableTops = Gameboard.tileList.filter(function(element) {return (element.dataset.symbol === '')}).filter(function(element) {return (element.dataset.position === 'top')})
+                                             .map(function(element) {return (element.id)})
+        if (availableTops.length !== 0) {
+            tileToPlay = availableTops[0]
+        }
+
+    } else {
+
+        //PC completes row
+        for (let row = 0; row < 3; row++) {
+            let rowArray = []
+            let empty = 0
+            let compCount = 0
+            let playerCount = 0
+            for (let c = 0; c < 3; c++) {
+                let tile = document.getElementById(`r${row}c${c}`).dataset.symbol
+                rowArray.push(tile)
+                if (tile === '') {empty++}
+                else if (tile === playerTwo.symbol[1]) {compCount++}
+                else if (tile === playerOne.symbol[1]) {playerCount++}
+            }
+            if (compCount === 2 && playerCount === 0) {
+                let rowToPlay = row
+                let columnToPlay = rowArray.indexOf('')
+                tileToPlay = `r${rowToPlay}c${columnToPlay}`
+                console.log(tileToPlay)
+                break;
+            }
+        }
+        //PC completes column
+        if (tileToPlay === '') {
+            for (let column = 0; column < 3; column++) {
+                let columnArray = []
+                let empty = 0
+                let compCount = 0
+                let playerCount = 0
+                for (let r = 0; r < 3; r++) {
+                    let tile = document.getElementById(`r${r}c${column}`).dataset.symbol
+                    columnArray.push(tile)
+                    if (tile === '') {empty++}
+                    else if (tile === playerTwo.symbol[1]) {compCount++}
+                    else if (tile === playerOne.symbol[1]) {playerCount++}
+                }
+                if (compCount === 2 && playerCount === 0) {
+                    let columnToPlay = column
+                    let rowToPlay = columnArray.indexOf('')
+                    tileToPlay = `r${rowToPlay}c${columnToPlay}`
+                    console.log(tileToPlay)
+                    break;
+                }
+            }
+        }
+        //PC completes diagonal
+        if (tileToPlay === '') {
+            let diagonalArray = [document.getElementById('r2c0').dataset.symbol,document.getElementById('r1c1').dataset.symbol, document.getElementById('r0c2').dataset.symbol]
+            let empty = 0
+            let compCount = 0
+            let playerCount = 0
+
+            for (let i = 0; i < 3; i++) {
+                if (diagonalArray[i] === '') {empty++}
+                else if (diagonalArray[i]=== playerTwo.symbol[1]) {compCount++}
+                else if (diagonalArray[i] === playerOne.symbol[1]) {playerCount++}
+            }
+            if (compCount === 2 && playerCount === 0) {
+                let index = diagonalArray.indexOf('')
+                if (index === 0) {tileToPlay = 'r2c0'}
+                else if (index === 1) {tileToPlay = 'r1c1'}
+                else if (index === 2) {tileToPlay = 'r0c2'}
+            }
+        }
+        //PC completes backDiagonal
+        if (tileToPlay === '') {
+            let backDiagonalArray = [document.getElementById('r0c0').dataset.symbol,document.getElementById('r1c1').dataset.symbol, document.getElementById('r2c2').dataset.symbol]
+            let empty = 0
+            let compCount = 0
+            let playerCount = 0
+            for (let i = 0; i < 3; i++) {
+                if (backDiagonalArray[i] === '') {empty++}
+                else if (backDiagonalArray[i]=== playerTwo.symbol[1]) {compCount++}
+                else if (backDiagonalArray[i] === playerOne.symbol[1]) {playerCount++}
+            }
+            if (compCount === 2 && playerCount === 0) {
+                let index = backDiagonalArray.indexOf('')
+                if (index === 0) {tileToPlay = 'r0c0'}
+                else if (index === 1) {tileToPlay = 'r1c1'}
+                else if (index === 2) {tileToPlay = 'r2c2'}
+            }
+        }
+
+        //PC stop row
+        for (let row = 0; row < 3; row++) {
+            let rowArray = []
+            let empty = 0
+            let compCount = 0
+            let playerCount = 0
+            for (let c = 0; c < 3; c++) {
+                let tile = document.getElementById(`r${row}c${c}`).dataset.symbol
+                rowArray.push(tile)
+                if (tile === '') {empty++}
+                else if (tile === playerTwo.symbol[1]) {compCount++}
+                else if (tile === playerOne.symbol[1]) {playerCount++}
+            }
+            if (compCount === 0 && playerCount === 2) {
+                let rowToPlay = row
+                let columnToPlay = rowArray.indexOf('')
+                tileToPlay = `r${rowToPlay}c${columnToPlay}`
+                console.log(tileToPlay)
+                break;
+            }
+        }
+        //PC stop columns
+        if (tileToPlay === '') {
+            for (let column = 0; column < 3; column++) {
+                let columnArray = []
+                let empty = 0
+                let compCount = 0
+                let playerCount = 0
+                for (let r = 0; r < 3; r++) {
+                    let tile = document.getElementById(`r${r}c${column}`).dataset.symbol
+                    columnArray.push(tile)
+                    if (tile === '') {empty++}
+                    else if (tile === playerTwo.symbol[1]) {compCount++}
+                    else if (tile === playerOne.symbol[1]) {playerCount++}
+                }
+                if (compCount === 0 && playerCount === 2) {
+                    let columnToPlay = column
+                    let rowToPlay = columnArray.indexOf('')
+                    tileToPlay = `r${rowToPlay}c${columnToPlay}`
+                    console.log(tileToPlay)
+                    break;
+                }
+            }
+        }
+        //PC stop diagonal
+        if (tileToPlay === '') {
+            let diagonalArray = [document.getElementById('r2c0').dataset.symbol,document.getElementById('r1c1').dataset.symbol, document.getElementById('r0c2').dataset.symbol]
+            let empty = 0
+            let compCount = 0
+            let playerCount = 0
+
+            for (let i = 0; i < 3; i++) {
+                if (diagonalArray[i] === '') {empty++}
+                else if (diagonalArray[i]=== playerTwo.symbol[1]) {compCount++}
+                else if (diagonalArray[i] === playerOne.symbol[1]) {playerCount++}
+            }
+            if (compCount === 0 && playerCount === 2) {
+                let index = diagonalArray.indexOf('')
+                if (index === 0) {tileToPlay = 'r2c0'}
+                else if (index === 1) {tileToPlay = 'r1c1'}
+                else if (index === 2) {tileToPlay = 'r0c2'}
+            }
+        }
+        //PC stop backDiagonal
+        if (tileToPlay === '') {
+            let backDiagonalArray = [document.getElementById('r0c0').dataset.symbol,document.getElementById('r1c1').dataset.symbol, document.getElementById('r2c2').dataset.symbol]
+            let empty = 0
+            let compCount = 0
+            let playerCount = 0
+            for (let i = 0; i < 3; i++) {
+                if (backDiagonalArray[i] === '') {empty++}
+                else if (backDiagonalArray[i]=== playerTwo.symbol[1]) {compCount++}
+                else if (backDiagonalArray[i] === playerOne.symbol[1]) {playerCount++}
+            }
+            if (compCount === 0 && playerCount === 2) {
+                let index = backDiagonalArray.indexOf('')
+                if (index === 0) {tileToPlay = 'r0c0'}
+                else if (index === 1) {tileToPlay = 'r1c1'}
+                else if (index === 2) {tileToPlay = 'r2c2'}
+            }
+        }
+
+        //Play on the center
+        if (document.getElementById('r1c1').dataset.symbol === '') {
+            tileToPlay = 'r1c1'
+        }
+
+        //Play on first available corner
+        if (tileToPlay === '') {
+            let availableCorners = Gameboard.tileList.filter(function(element) {return (element.dataset.symbol === '')}).filter(function(element) {return (element.dataset.position === 'corner')})
+                                                    .map(function(element) {return (element.id)})
+            if (availableCorners.length !== 0) {
+                tileToPlay = availableCorners[0]
+            }
+        }
+
+        //Play on first available top
+        if (tileToPlay === '') {
+            let availableTops = Gameboard.tileList.filter(function(element) {return (element.dataset.symbol === '')}).filter(function(element) {return (element.dataset.position === 'top')})
+                                                    .map(function(element) {return (element.id)})
+            if (availableTops.length !== 0) {
+                tileToPlay = availableTops[0]
+            }        
+        } 
+    }
+    return tileToPlay
+    }
+
 
     let turnCount = 1;
     let gameStatus ='gameOn'
@@ -168,11 +383,13 @@ const startGame = function() {
         playerCounter = 0;
         gameStatus ='gameOn'
         turnCount = 1
+        startGame()
    }
 
     return {
         resetBoard,
         startGame,
+        smartComputerTurn,
     }
 })();
 

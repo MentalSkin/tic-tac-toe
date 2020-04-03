@@ -16,7 +16,8 @@
                     <label for="gameType" class="labelInput">Game Type</label>
                     <select id="gameType">
                         <option value="humanVsHuman">Human vs Human</option>
-                        <option value="humanVsComputer">Human vs Computer</option>
+                        <option value="humanVsComputer">Human vs Dumb Computer</option>
+                        <option value="humanVsSmartComputer">Human vs Smart Computer</option>
                     </select>
                 </div>
                 <div id="divNames">
@@ -46,15 +47,15 @@
             <div id="gameboardContainer">
                 <label id="displayPlayerOneName" class="nameLabel">Player1</label>
                 <div id="gameboard">
-                    <div id="r0c0" class="tile" data-symbol=""></div>
-                    <div id="r0c1" class="tile" data-symbol=""></div>
-                    <div id="r0c2" class="tile" data-symbol=""></div>
-                    <div id="r1c0" class="tile" data-symbol=""></div>
-                    <div id="r1c1" class="tile" data-symbol=""></div>
-                    <div id="r1c2" class="tile" data-symbol=""></div>
-                    <div id="r2c0" class="tile" data-symbol=""></div>
-                    <div id="r2c1" class="tile" data-symbol=""></div>
-                    <div id="r2c2" class="tile" data-symbol=""></div>
+                    <div id="r0c0" class="tile" data-symbol="" data-position="corner"></div>
+                    <div id="r0c1" class="tile" data-symbol="" data-position="top"></div>
+                    <div id="r0c2" class="tile" data-symbol="" data-position="corner"></div>
+                    <div id="r1c0" class="tile" data-symbol="" data-position="top"></div>
+                    <div id="r1c1" class="tile" data-symbol="" data-position="center"></div>
+                    <div id="r1c2" class="tile" data-symbol="" data-position="top"></div>
+                    <div id="r2c0" class="tile" data-symbol="" data-position="corner"></div>
+                    <div id="r2c1" class="tile" data-symbol=""data-position="top"></div>
+                    <div id="r2c2" class="tile" data-symbol="" data-position="corner"></div>
                 </div>
                 <label id="displayPlayerTwoName" class="nameLabel">Player2</label>
             </div>
