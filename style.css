@@ -65,13 +65,17 @@ i {
 }
 
 .nameLabel {
-    display: flex;
-    padding: 80px 30px 10px 30px;
+    display: block;
+    text-align: center;
+    padding: 20px 30px 10px 30px;
     font-size: 20px;
-    width: 200px;
-    text-align: center; 
+    max-width: 400px;
 }
 
+.divDisplayPlayerName {
+    display: initial;
+    max-width: 400px;
+}
 
 #gameboardContainer {
     display: flex;
@@ -95,8 +99,7 @@ i {
     border-radius: 5px;
     text-align: center;
     display: flex;
-    justify-content: center;
-    
+    justify-content: center;    
 }
 
 .tileClicked {

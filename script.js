@@ -360,8 +360,16 @@ const GameFlow = (function(){
             tiles[6].dataset.symbol === 'x' && tiles[4].dataset.symbol === 'x' && tiles[2].dataset.symbol === 'x' || tiles[6].dataset.symbol === 'o' && tiles[4].dataset.symbol === 'o' && tiles[2].dataset.symbol === 'o')
         {
             console.log('Winner!')
-            gameStatus = 'winner' 
+            gameStatus = 'winner'
             //if we have a winner: message, ...
+            if (currentPlayer === playerOne) {
+                document.getElementById('displayPlayerOneName').style.color = 'green';
+                document.getElementById('displayPlayerOneName').style.fontWeight = 'bold'
+            }
+            else {
+                document.getElementById('displayPlayerTwoName').style.color = 'green';
+                document.getElementById('displayPlayerTwoName').style.fontWeight = 'bold'
+            }
         } else if (turnCount === 9){
             console.log('Draw!')
             gameStatus = 'draw'
@@ -383,6 +391,11 @@ const GameFlow = (function(){
         playerCounter = 0;
         gameStatus ='gameOn'
         turnCount = 1
+        document.getElementById('displayPlayerOneName').style.color = 'black';
+        document.getElementById('displayPlayerOneName').style.fontWeight = 'normal'
+        document.getElementById('displayPlayerTwoName').style.color = 'black';
+        document.getElementById('displayPlayerTwoName').style.fontWeight = 'normal'
+        
         startGame()
    }
 
@@ -396,14 +409,3 @@ const GameFlow = (function(){
    
 document.getElementById('resetButton').onclick = function() {GameFlow.resetBoard()}
 document.getElementById('startButton').onclick = function() {GameFlow.startGame()}
-
-
-
-
-
-//preference: Make 3; block 3; center; corners
-//exceptions: center traped in corners;
-
-
-
-//ISSUES: Clicking 2 times on a filed tile, skips change of symbol

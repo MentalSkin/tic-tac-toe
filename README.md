@@ -1,1 +1,3 @@
 # Tic-Tac-Toe Game: From The Odin Project bootcamp
+Implemented my own AI algorithm for the smart computer.
+I know the code should be refactored, I know...
